@@ -1,7 +1,6 @@
 ﻿#include <mySimpleComputer.h>
 
 const unsigned char MEM_SIZE = 100;
-
 unsigned char *memory;
 unsigned char checkSystem;
 
