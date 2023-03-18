@@ -1,3 +1,5 @@
+.PHONY: all clean
+
 app_name = sc
 lib_name = mySimpleComputer
 obj_folder = obj
@@ -21,12 +23,11 @@ lib_objects = $(lib_sources:src/%.c=obj/src/%.o)
 # test_sources = $(shell find test/ -name '*.c')
 # test_objects = $(test_sources:test/%.c=obj/test/%.o)
 
-.PHONY: all
 all: $(app_path)
 
 $(app_path): $(app_objects) $(lib_path)
 	mkdir -p bin/
-	gcc $(cflags) $(myflag) -Lobj/src/mySimpleComputer/ $< -lmySimpleComputer -o $@
+	gcc $(cflags) $(myflag) -Lobj/src/$(lib_name) $< -l$(lib_name) -o $@
 
 $(lib_path): $(lib_objects)
 	ar rcs $@ $^
@@ -42,7 +43,6 @@ obj/%.o: %.c
 # $(test_path): $(test_objects) $(lib_path)
 # 	gcc $(cflags) -I thirdparty -I src $^ $(myflag) -o $@
 
-.PHONY: clean
 clean:
 	$(RM) $(app_path) $(lib_path)
 	rm -r obj
