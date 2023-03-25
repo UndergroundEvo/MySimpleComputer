@@ -1,5 +1,5 @@
 #include <mySimpleComputer.h>
-// #include <myTerm.h>
+#include <myTerm.h>
 
 unsigned short ACCUM;
 unsigned char IP;
@@ -7,7 +7,7 @@ unsigned char IP;
 int
 mt_clrscreen ()
 {
-  printf ("\033[H\033[2J");
+  system ("clear");
   return 0;
 }
 

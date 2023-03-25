@@ -1,3 +1,4 @@
+#include <mySimpleComputer.h>
 #include <string.h>
 #include <sys/ioctl.h>
 #include <unistd.h>
@@ -14,7 +15,8 @@ enum colors
   BLACK
 };
 
-void mt_clrscr ();
-void mt_gotoXY (int numRow, int numCol);
-void mt_setfgcolor (enum colors);
-void mt_setbgcolor (enum colors);
+int mt_clrscreen ();
+int mt_getscreensize (int *rows, int *cols);
+int mt_gotoXY (int numRow, int numCol);
+int mt_setfgcolor (enum colors);
+int mt_setbgcolor (enum colors);
