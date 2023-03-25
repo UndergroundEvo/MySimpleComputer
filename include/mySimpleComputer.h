@@ -17,7 +17,6 @@ extern unsigned char checkSystem;
 extern unsigned short ACCUM;
 extern unsigned char IP;
 
-
 int sc_memoryInit ();
 int sc_memorySet (int address, int value);
 int sc_memoryGet (int address, int *value);
