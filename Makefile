@@ -1,41 +1,32 @@
-main_app = main_app
-lab1_test = lab01
-lib_name = mySimpleComputer
 lib1 = mySimpleComputer
 lib2 = myTerm
-obj_folder = obj
 
-cflags = -Wall -Werror -I include -MP -MMD
-# cflags += -lm
+cflags = -Wall -I include -MP -MMD
 
-main_app_path = bin/$(main_app)
-lab1_test_path = bin/$(lab1_test)
+objects_temp = $(shell find src/ -name '*.c')
+objects = $(objects_temp:%.c=obj/%.o)
 
-lib_path = obj/src/$(lib_name)/lib$(lib_name).a
-
-main_app_sources = src/sc/$(main_app).c
-main_app_objects = $(main_app_sources:src/%.c=obj/src/%.o)
-lab1_test_sources = src/sc/$(lab1_test).c
-lab1_test_objects = $(lab1_test_sources:src/%.c=obj/src/%.o)
-
-lib_sources = $(shell find src/$(lib1, lib2) -name '*.c')
-lib_objects = $(lib_sources:src/%.c=obj/src/%.o)
+libs_temp = $(shell find src/lib/ -name '*.c')
+libs = $(libs_temp:src/lib/%.c=obj/src/lib/lib%.a)
 
 .PHONY: all
-all: $(main_app_objects) $(lab1_test_objects) $(lab2_test_objects) $(lib_path)
-	mkdir -p bin/
-	gcc $(cflags) -Lobj/src/mySimpleComputer/ $(main_app_objects) -lmySimpleComputer -o $(main_app_path)
-	gcc $(cflags) -Lobj/src/mySimpleComputer/ $(lab1_test_objects) -lmySimpleComputer -o $(lab1_test_path)
+all: create_dirs $(objects) $(libs)
+	gcc $(cflags) -Lobj/src/lib/ obj/src/main/main.o -l$(lib1) -l$(lib2)  -o bin/main
+	gcc $(cflags) -Lobj/src/lib/ obj/src/main/lab01.o -l$(lib1) -l$(lib2) -o bin/lab01
+	gcc $(cflags) -Lobj/src/lib/ obj/src/main/lab02.o -l$(lib1) -l$(lib2) -o bin/lab02
 
-$(lib_path): $(lib_objects)
+obj/src/lib/lib%.a: obj/src/lib/%.o
 	ar rcs $@ $^
 
 obj/%.o: %.c
-	mkdir -p obj/src/sc/
-	mkdir -p obj/src/mySimpleComputer/
 	gcc -c $(cflags) $< -o $@
+
+create_dirs:
+	mkdir -p bin/
+	mkdir -p obj/src/main/
+	mkdir -p obj/src/lib/
 
 .PHONY: clean
 clean:
-	rm -r obj
-	rm -r bin
+	rm -rf obj
+	rm -rf bin

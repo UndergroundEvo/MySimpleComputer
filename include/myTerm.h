@@ -1,7 +1,7 @@
-#include <mySimpleComputer.h>
-#include <string.h>
-#include <sys/ioctl.h>
-#include <unistd.h>
+#ifndef MYTERM_H
+#define MYTERM_H
+
+#include "include.h"
 
 enum colors
 {
@@ -20,3 +20,4 @@ int mt_getscreensize (int *rows, int *cols);
 int mt_gotoXY (int numRow, int numCol);
 int mt_setfgcolor (enum colors);
 int mt_setbgcolor (enum colors);
+#endif

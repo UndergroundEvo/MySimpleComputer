@@ -1,4 +1,3 @@
-#include <mySimpleComputer.h>
 #include <myTerm.h>
 
 unsigned short ACCUM;

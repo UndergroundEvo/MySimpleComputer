@@ -1,9 +1,7 @@
-﻿#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/ioctl.h>
-#include <unistd.h>
+﻿#ifndef MYSIMPLECOMPUTER_H
+#define MYSIMPLECOMPUTER_H
+
+#include "include.h"
 
 #define OVERFLOW 0
 #define DIVISION_BY_ZERO 1
@@ -27,3 +25,4 @@ int sc_regSet (int register, int value);
 int sc_regGet (int register, int *value);
 int sc_commandEncode (int command, int operand, int *value);
 int sc_commandDecode (int value, int *command, int *operand);
+#endif
