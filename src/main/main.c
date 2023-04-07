@@ -8,6 +8,13 @@ printTerminal ()
   int rows = 0, cols = 0;
   mt_clrscreen ();
   mt_getscreensize (&rows, &cols);
+  bc_box (1, 1, 61, 12);   // память
+  bc_box (62, 1, 22, 3);   // аккамулятор
+  bc_box (62, 4, 22, 3);   // счетчик инструкций
+  bc_box (62, 7, 22, 3);   // операторы
+  bc_box (62, 10, 22, 3);  // флаги
+  bc_box (1, 13, 52, 10);  // буквы
+  bc_box (53, 13, 37, 10); // кнопки
   mt_gotoXY (30, 1);
   printf (" Memory ");
   mt_gotoXY (66, 1);
@@ -18,7 +25,7 @@ printTerminal ()
   printf (" Operation ");
   mt_gotoXY (68, 10);
   printf (" Flags ");
-  mt_gotoXY (48, 13);
+  mt_gotoXY (55, 13);
   printf (" Keys: ");
   char *hotK[] = { (char *)"l  - load",
                    (char *)"s  - save",
@@ -30,7 +37,7 @@ printTerminal ()
 
   for (int i = 0; i < sizeof (hotK) / sizeof (*hotK); ++i)
     {
-      mt_gotoXY (48, i + 14);
+      mt_gotoXY (55, i + 14);
       printf ("%s", hotK[i]);
     }
 }
@@ -53,8 +60,8 @@ printMEM ()
 int
 printflag ()
 {
-  // char tmp[] = { 'O', 'Z', 'M', 'P', 'C' };
-  wchar_t tmp[] = { '⚰', '🧨', '🗿', '⛔', '🛑' };
+  char tmp[] = { 'O', 'Z', 'M', 'P', 'C' };
+  // wchar_t tmp[] = { '💀', '🧨', '🗿', '⛔', '🛑' };
   for (int i = 0; i < REG_SIZE; i++)
     {
       int value;
@@ -70,6 +77,20 @@ printflag ()
 }
 
 int
+drawingBigChars ()
+{
+  int tmp = 3;
+  if (!((tmp >> 14) & 1))
+    bc_printbigchar (big_chars[16], 2, 14, CYAN, RED);
+  for (int i = 0; i < 4; ++i)
+    {
+      int ch = (tmp & (0b1111 << (4 * (3 - i)))) >> (4 * (3 - i));
+      bc_printbigchar (big_chars[ch], 2 + 8 * (i + 1) + 2 * (i + 1), 14, CYAN,
+                       RED);
+    }
+  return 0;
+}
+int
 main ()
 {
   sc_memoryInit ();
@@ -83,6 +104,7 @@ main ()
 
   printTerminal ();
   printMEM ();
+  drawingBigChars ();
 
   sc_regSet (REG_SIZE, 5);
   sc_regSet (OVERFLOW, 1);
