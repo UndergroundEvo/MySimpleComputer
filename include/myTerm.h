@@ -20,5 +20,5 @@ int mt_getscreensize (int *rows, int *cols);
 int mt_gotoXY (int numRow, int numCol);
 int mt_setfgcolor (enum colors);
 int mt_setbgcolor (enum colors);
-int mt_setdefaultcolorsettings();
+int mt_setdefaultcolorsettings ();
 #endif
