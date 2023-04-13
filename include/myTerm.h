@@ -5,14 +5,23 @@
 
 enum colors
 {
+  BLACK,
   RED,
   GREEN,
+  BROWN,
   BLUE,
-  YELLOW,
-  MANGETA,
+  MAGENT,
   CYAN,
+  DARK_GRAY,
+  LIGHT_GRAY,
+  PINK,
+  LIME,
+  SUN,
+  AQUA,
+  LIGHT_MAGENT,
+  LIGHT_CYAN,
   WHITE,
-  BLACK
+  DEFAULT
 };
 
 int mt_clrscreen ();

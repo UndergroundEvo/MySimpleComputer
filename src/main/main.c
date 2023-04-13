@@ -1,4 +1,4 @@
-#include <mySimpleComputer.h>
+#include <include.h>
 
 /* волшебный пингвин 🐧 */
 
@@ -14,7 +14,7 @@ printTerminal ()
   bc_box (62, 7, 22, 3);   // операторы
   bc_box (62, 10, 22, 3);  // флаги
   bc_box (1, 13, 52, 10);  // буквы
-  bc_box (53, 13, 37, 10); // кнопки
+  bc_box (53, 13, 31, 10); // кнопки
   mt_gotoXY (30, 1);
   printf (" Memory ");
   mt_gotoXY (66, 1);
@@ -79,17 +79,21 @@ printflag ()
 int
 drawingBigChars ()
 {
-  int tmp = 3;
+  int tmp;
+  sc_memoryGet (1, &tmp);
   if (!((tmp >> 14) & 1))
-    bc_printbigchar (big_chars[16], 2, 14, CYAN, RED);
+    bc_printbigchar (bc[16], 2, 14, GREEN, BLACK);
+  tmp = tmp & 0x3FFF;
   for (int i = 0; i < 4; ++i)
     {
-      int ch = (tmp & (0b1111 << (4 * (3 - i)))) >> (4 * (3 - i));
-      bc_printbigchar (big_chars[ch], 2 + 8 * (i + 1) + 2 * (i + 1), 14, CYAN,
-                       RED);
+      int ch = (tmp & (0xF << (4 * (3 - i)))) >> (4 * (3 - i));
+
+      bc_printbigchar (bc[ch], 2 + 8 * (i + 1) + 2 * (i + 1), 14, GREEN,
+                       BLACK);
     }
   return 0;
 }
+
 int
 main ()
 {
@@ -97,9 +101,9 @@ main ()
   sc_regInit ();
 
   sc_memorySet (0, 5);
-  sc_memorySet (1, 4);
+  sc_memorySet (1, 1);
   sc_memorySet (2, 3);
-  sc_memorySet (3, 2);
+  sc_memorySet (3, 1);
   sc_memorySet (4, 1);
 
   printTerminal ();

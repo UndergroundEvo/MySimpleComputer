@@ -1,29 +1,24 @@
 #include "myBigChars.h"
 
-unsigned int big_chars[][2] = {
-  { 0xE7E7FFFF, 0xFFFFE7E7 }, // 0
-  { 0x1CDC7C3C, 0xFFFF1C1C }, // 1
-  { 0xFF07FFFF, 0xFFFFE0FF }, // 2
-  { 0xFF07FFFF, 0xFFFF07FF }, // 3
-  { 0xFFE7E7E7, 0x070707FF }, // 4
-  { 0xFFE0FFFF, 0xFFFF07FF }, // 5
-  { 0xFFE0FFFF, 0xFFFFE7FF }, // 6
-  { 0x1C0EFFFE, 0x3838FE38 }, // 7
-  { 0x7EE7FF7E, 0x7EFFE77E }, // 8
-  { 0xFFE7FFFF, 0xFFFF07FF }, // 9
-  { 0xFFE7FF7E, 0xE7E7E7FF }, // A
-  { 0xFEE7FFFE, 0xFEFFE7FE }, // B
-  { 0xE0E7FF7E, 0x7EFFE7E0 }, // C
-  { 0xE7E7FFF8, 0xF8FFE7E7 }, // D
-  { 0xFFE0FFFF, 0xFFFFE0FF }, // E
-  { 0xFFE0FFFF, 0xE0E0E0FF }, // F
-  { 0x7E180000, 0x00000018 }, // +
-  { 0x7E000000, 0x00000000 }, // -
+char buf[512];
+
+unsigned int bc[][2] = {
+  { 0xE7E7FFFF, 0xFFFFE7E7 }, { 0x1CDC7C3C, 0xFFFF1C1C },
+  { 0xFF07FFFF, 0xFFFFE0FF }, { 0xFF07FFFF, 0xFFFF07FF },
+  { 0xFFE7E7E7, 0x070707FF }, { 0xFFE0FFFF, 0xFFFF07FF },
+  { 0xFFE0FFFF, 0xFFFFE7FF }, { 0x1C0EFFFE, 0x3838FE38 },
+  { 0x7EE7FF7E, 0x7EFFE77E }, { 0xFFE7FFFF, 0xFFFF07FF },
+  { 0xFFE7FF7E, 0xE7E7E7FF }, { 0xFEE7FFFE, 0xFEFFE7FE },
+  { 0xE0E7FF7E, 0x7EFFE7E0 }, { 0xE7E7FFF8, 0xF8FFE7E7 },
+  { 0xFFE0FFFF, 0xFFFFE0FF }, { 0xFFE0FFFF, 0xE0E0E0FF },
+  { 0x7E180000, 0x00000018 }, { 0x7E000000, 0x00000000 },
 };
+/* 0,1,2,3,4,5,6,7,8,9,A,B,C,D,E,F,+,- */
+
 int
-bc_printA (char *str)
+bc_printA (char ch)
 {
-  printf ("\033(0%s\033(B", str);
+  printf ("\033(0%c\033(B", ch);
   return 0;
 }
 int
@@ -35,26 +30,26 @@ bc_box (int x, int y, int width, int height)
       || (width <= 1) || (height <= 1))
     return -1;
   mt_gotoXY (x, y);
-  bc_printA ((char *)ACS_UL);
+  bc_printA ((char)ACS_UL);
   mt_gotoXY (x + width - 1, y);
-  bc_printA ((char *)ACS_UR);
+  bc_printA ((char)ACS_UR);
   mt_gotoXY (x + width - 1, y + height - 1);
-  bc_printA ((char *)ACS_DR);
+  bc_printA ((char)ACS_DR);
   mt_gotoXY (x, y + height - 1);
-  bc_printA ((char *)ACS_DL);
+  bc_printA ((char)ACS_DL);
   for (int i = 1; i < width - 1; ++i)
     {
       mt_gotoXY (x + i, y);
-      bc_printA ((char *)ACS_H);
+      bc_printA ((char)ACS_H);
       mt_gotoXY (x + i, y + height - 1);
-      bc_printA ((char *)ACS_H);
+      bc_printA ((char)ACS_H);
     }
   for (int i = 1; i < height - 1; ++i)
     {
       mt_gotoXY (x, y + i);
-      bc_printA ((char *)ACS_V);
+      bc_printA ((char)ACS_V);
       mt_gotoXY (x + width - 1, y + i);
-      bc_printA ((char *)ACS_V);
+      bc_printA ((char)ACS_V);
     }
   return 0;
 }
