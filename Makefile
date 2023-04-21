@@ -1,8 +1,8 @@
+lib0 = Render
 lib1 = mySimpleComputer
 lib2 = myTerm
 lib3 = myBigChars
 lib4 = myReadkey
-lib0 = DLC
 
 cflags = -Wall -I include -MP -MMD
 
@@ -14,11 +14,11 @@ libs = $(libs_temp:src/lib/%.c=obj/src/lib/lib%.a)
 
 .PHONY: all
 all: create_dirs $(objects) $(libs)
-	gcc $(cflags) -Lobj/src/lib/ obj/src/main/main.o -l$(lib1) -l$(lib2) -l$(lib3) -l$(lib4) -l$(lib0) -o bin/main
 	gcc $(cflags) -Lobj/src/lib/ obj/src/main/lab01.o -l$(lib1) -o bin/lab01
 	gcc $(cflags) -Lobj/src/lib/ obj/src/main/lab02.o -l$(lib1) -l$(lib2) -o bin/lab02
 	gcc $(cflags) -Lobj/src/lib/ obj/src/main/lab03.o -l$(lib1) -l$(lib2) -l$(lib3) -o bin/lab03
 	gcc $(cflags) -Lobj/src/lib/ obj/src/main/lab04.o -l$(lib1) -l$(lib2) -l$(lib3) -l$(lib4) -o bin/lab04
+	gcc $(cflags) -Lobj/src/lib/ obj/src/main/main.o -l$(lib0) -l$(lib1) -l$(lib2) -l$(lib3) -l$(lib4) -o bin/main
 
 obj/src/lib/lib%.a: obj/src/lib/%.o
 	ar rcs $@ $^

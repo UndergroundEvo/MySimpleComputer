@@ -20,5 +20,6 @@
 #include "mySimpleComputer.h"
 #include "myTerm.h"
 #include "myReadkey.h"
+#include "Render.h"
 
 #endif
