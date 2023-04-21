@@ -19,5 +19,6 @@
 #include "myBigChars.h"
 #include "mySimpleComputer.h"
 #include "myTerm.h"
+#include "myReadkey.h"
 
 #endif

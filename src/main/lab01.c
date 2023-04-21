@@ -1,4 +1,4 @@
-﻿#include <mySimpleComputer.h>
+﻿#include <include.h>
 
 int
 main ()
