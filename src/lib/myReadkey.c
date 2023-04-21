@@ -1,105 +1,115 @@
 #include "myReadkey.h"
 struct termios save;
 
-int rk_readKey(enum keys* key) {
-    fflush(stdout); // очистка потока вывода
-    char buffer[5] = "\0";
-    rk_myTermRegime(0, 30, 0, 0, 0);
-    read(fileno(stdin), buffer, 5);
-    rk_myTermRestore();
-    if (key == NULL)
+int
+rk_readKey (enum keys *key)
+{
+  fflush (stdout); // очистка потока вывода
+  char buffer[5] = "\0";
+  rk_myTermRegime (0, 30, 0, 0, 0);
+  read (fileno (stdin), buffer, 5);
+  rk_myTermRestore ();
+  if (key == NULL)
     {
-        return -1;
+      return -1;
     }
-    if (buffer[0] == '\E')
+  if (buffer[0] == '\E')
     {
-        switch (buffer[1])
+      switch (buffer[1])
         {
         case '\0':
-            *key = KEY_ESC;
-            break;
+          *key = KEY_ESC;
+          break;
         case '[':
-            switch (buffer[2])
+          switch (buffer[2])
             {
             case 'A':
-                *key = KEY_UP;
-                break;
+              *key = KEY_UP;
+              break;
             case 'B':
-                *key = KEY_DOWN;
-                break;
+              *key = KEY_DOWN;
+              break;
             case 'C':
-                *key = KEY_RIGHT;
-                break;
+              *key = KEY_RIGHT;
+              break;
             case 'D':
-                *key = KEY_LEFT;
-                break;
+              *key = KEY_LEFT;
+              break;
             case '5':
-                *key = KEY_F5;
-                break;
+              *key = KEY_F5;
+              break;
             case '1':
-                if (buffer[3] == '7' && buffer[4] == '~')
-                    *key = KEY_F6;
-                else if (buffer[3] == '5' && buffer[4] == '~')
-                    *key = KEY_F5;
-                break;
+              if (buffer[3] == '7' && buffer[4] == '~')
+                *key = KEY_F6;
+              else if (buffer[3] == '5' && buffer[4] == '~')
+                *key = KEY_F5;
+              break;
             default:
-                break;
+              break;
             }
-            break;
+          break;
         default:
-            break;
+          break;
         }
     }
-    else if (buffer[0] == '\n' && buffer[1] == '\0')
+  else if (buffer[0] == '\n' && buffer[1] == '\0')
     {
-        *key = KEY_ENTER;
+      *key = KEY_ENTER;
     }
-    else
+  else
     {
-        switch (buffer[0])
+      switch (buffer[0])
         {
         case 'L':
-            *key = KEY_L;
-            break;
+          *key = KEY_L;
+          break;
         case 'S':
-            *key = KEY_S;
-            break;
+          *key = KEY_S;
+          break;
         case 'R':
-            *key = KEY_R;
-            break;
+          *key = KEY_R;
+          break;
         case 'T':
-            *key = KEY_T;
-            break;
+          *key = KEY_T;
+          break;
         case 'I':
-            *key = KEY_I;
-            break;
+          *key = KEY_I;
+          break;
         default:
-            break;
+          break;
         }
     }
-    return 0;
+  return 0;
 }
-int rk_myTermSave() {
-    if (tcgetattr(fileno(stdin), &save))
-        return -1;
-    return 0;
+int
+rk_myTermSave ()
+{
+  if (tcgetattr (fileno (stdin), &save))
+    return -1;
+  return 0;
 }
-int rk_myTermRestore() {
-    tcsetattr(fileno(stdin), TCSAFLUSH, &save);
-    return 0;
+int
+rk_myTermRestore ()
+{
+  tcsetattr (fileno (stdin), TCSAFLUSH, &save);
+  return 0;
 }
-int rk_myTermRegime(int regime, unsigned int vtime, unsigned int vmin, int echo, int sigint) {
-    struct termios curr;
-    tcgetattr(fileno(stdin), &curr);
-    if (regime)
-        curr.c_lflag |= ICANON;
-    else {
-        curr.c_lflag &= ~ICANON;
-        sigint ? (curr.c_lflag |= ISIG) : (curr.c_lflag &= ~ISIG);
-        echo ? (curr.c_lflag |= ECHO) : (curr.c_lflag &= ~ECHO);
-        curr.c_cc[VMIN] = vmin;
-        curr.c_cc[VTIME] = vtime;
+int
+rk_myTermRegime (int regime, unsigned int vtime, unsigned int vmin, int echo,
+                 int sigint)
+{
+  struct termios curr;
+  tcgetattr (fileno (stdin), &curr);
+  if (regime)
+    curr.c_lflag |= ICANON;
+  else
+    {
+      curr.c_lflag &= ~ICANON;
+      sigint ? (curr.c_lflag |= ISIG) : (curr.c_lflag &= ~ISIG);
+      echo ? (curr.c_lflag |= ECHO) : (curr.c_lflag &= ~ECHO);
+      curr.c_cc[VMIN] = vmin;
+      curr.c_cc[VTIME] = vtime;
     }
-    tcsetattr(0, TCSAFLUSH, &curr);
-    return 0;
+  tcsetattr (0, TCSAFLUSH, &curr);
+  return 0;
 }
