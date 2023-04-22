@@ -13,12 +13,10 @@ libs_temp = $(shell find src/lib/ -name '*.c')
 libs = $(libs_temp:src/lib/%.c=obj/src/lib/lib%.a)
 
 .PHONY: all
-all: create_dirs $(objects) $(libs)
-	gcc $(cflags) -Lobj/src/lib/ obj/src/main/lab01.o -l$(lib1) -o bin/lab01
-	gcc $(cflags) -Lobj/src/lib/ obj/src/main/lab02.o -l$(lib1) -l$(lib2) -o bin/lab02
-	gcc $(cflags) -Lobj/src/lib/ obj/src/main/lab03.o -l$(lib1) -l$(lib2) -l$(lib3) -o bin/lab03
-	gcc $(cflags) -Lobj/src/lib/ obj/src/main/lab04.o -l$(lib1) -l$(lib2) -l$(lib3) -l$(lib4) -o bin/lab04
-	gcc $(cflags) -Lobj/src/lib/ obj/src/main/main.o -l$(lib0) -l$(lib1) -l$(lib2) -l$(lib3) -l$(lib4) -o bin/main
+all: create_dirs $(objects) $(libs) bin/main bin/lab01 bin/lab02 bin/lab03 bin/lab04
+
+-include obj/src/lib/*.d
+-include obj/src/main/*.d
 
 obj/src/lib/lib%.a: obj/src/lib/%.o
 	ar rcs $@ $^
@@ -30,8 +28,25 @@ create_dirs:
 	mkdir -p bin/
 	mkdir -p obj/src/main/
 	mkdir -p obj/src/lib/
+	touch create_dirs
+
+bin/main:
+	gcc $(cflags) -Lobj/src/lib/ obj/src/main/main.o -l$(lib0) -l$(lib1) -l$(lib2) -l$(lib3) -l$(lib4) -o bin/main
+
+bin/lab01:
+	gcc $(cflags) -Lobj/src/lib/ obj/src/main/lab01.o -l$(lib1) -o bin/lab01
+
+bin/lab02:
+	gcc $(cflags) -Lobj/src/lib/ obj/src/main/lab02.o -l$(lib1) -l$(lib2) -o bin/lab02
+
+bin/lab03:
+	gcc $(cflags) -Lobj/src/lib/ obj/src/main/lab03.o -l$(lib1) -l$(lib2) -l$(lib3) -o bin/lab03
+
+bin/lab04:
+	gcc $(cflags) -Lobj/src/lib/ obj/src/main/lab04.o -l$(lib1) -l$(lib2) -l$(lib3) -l$(lib4) -o bin/lab04
 
 .PHONY: clean
 clean:
+	rm -f create_dirs
 	rm -rf obj
 	rm -rf bin
