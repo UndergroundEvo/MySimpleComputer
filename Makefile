@@ -15,8 +15,8 @@ libs = $(libs_temp:src/lib/%.c=obj/src/lib/lib%.a)
 .PHONY: all
 all: create_dirs $(objects) $(libs) bin/main bin/lab01 bin/lab02 bin/lab03 bin/lab04
 
-#-include obj/src/lib/*.d
-#-include obj/src/main/*.d
+-include obj/src/lib/*.d
+-include obj/src/main/*.d
 
 obj/src/lib/lib%.a: obj/src/lib/%.o
 	ar rcs $@ $^
