@@ -1,4 +1,4 @@
-﻿#include "myBigChars.h"
+﻿#include <myBigChars.h>
 
 char buf[512];
 enum colors color;
