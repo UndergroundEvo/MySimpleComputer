@@ -2,13 +2,13 @@
 #define RENDER_H
 
 #include "include.h"
-
 #include "myBigChars.h"
 #include "myReadkey.h"
 #include "mySimpleComputer.h"
 #include "myTerm.h"
 
 extern short currMemCell;
+extern enum keys key;
 
 int rk_pause (int time);
 int print_norm (char *str, enum colors color);
@@ -19,6 +19,7 @@ int ui_setMCellValue ();
 int ui_saveMemory ();
 int ui_loadMemory ();
 int ui_setICounter ();
+int ui_setAccumulator ();
 int drawingBoxes ();
 int drawingTexts ();
 int drawingMemory ();
