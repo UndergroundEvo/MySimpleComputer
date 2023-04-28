@@ -2,7 +2,6 @@
 
 char buf[512];
 enum colors color;
-
 unsigned int bc[][2] = {
   { 0xE7E7FFFF, 0xFFFFE7E7 }, { 0x1CDC7C3C, 0xFFFF1C1C },
   { 0xFF07FFFF, 0xFFFFE0FF }, { 0xFF07FFFF, 0xFFFF07FF },

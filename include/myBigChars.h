@@ -2,7 +2,6 @@
 #define MYBIGCHARS_H
 
 #include "include.h"
-#include "myTerm.h"
 
 #define ACS_CKBOARD "\u2593" // Штриховка
 #define ACS_UL "\u250F"      // Левый верхний угол

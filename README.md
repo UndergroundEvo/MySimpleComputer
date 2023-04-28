@@ -1,4 +1,4 @@
 # Простейшая вычислительная машина Simple Computer
-- [ ] **Практическое задание №4:**
-    - **Тема:** Практическое задание № 3. Консоль управления моделью Simple Computer.
-    - **Ссылка для просмотра:** [lab04.pdf](https://eios.sibsutis.ru/pluginfile.php/247897/mod_assign/introattachment/0/lab04.pdf)
+- [ ] **Практическое задание №5:**
+    - **Тема:** Практическое задание № 5. Подсистема прерываний ЭВМ. Сигналы и их обработка.
+    - **Ссылка для просмотра:** [lab05.pdf](https://eios.sibsutis.ru/pluginfile.php/247897/mod_assign/introattachment/0/lab05.pdf)
