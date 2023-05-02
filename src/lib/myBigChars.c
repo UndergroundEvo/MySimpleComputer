@@ -1,4 +1,4 @@
-#include "myBigChars.h"
+﻿#include "myBigChars.h"
 
 char buf[512];
 
@@ -18,7 +18,7 @@ unsigned int bc[][2] = {
 int
 bc_printA (char ch)
 {
-  printf ("\033(0%c\033(B", ch);
+  write (1, &ch, sizeof (ch));
   return 0;
 }
 int
@@ -30,7 +30,8 @@ bc_box (int x, int y, int width, int height)
       || (width <= 1) || (height <= 1))
     return -1;
   mt_gotoXY (x, y);
-  bc_printA ((char)ACS_UL);
+  // bc_printA ((char)ACS_UL);
+  // printf("\033(0%c\033(B",(char*)ACS_UL);
   mt_gotoXY (x + width - 1, y);
   bc_printA ((char)ACS_UR);
   mt_gotoXY (x + width - 1, y + height - 1);

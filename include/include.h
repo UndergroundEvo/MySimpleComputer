@@ -16,7 +16,9 @@
 #include <unistd.h>
 #include <wchar.h>
 
+#include "Render.h"
 #include "myBigChars.h"
+#include "myReadkey.h"
 #include "mySimpleComputer.h"
 #include "myTerm.h"
 

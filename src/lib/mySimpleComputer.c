@@ -3,6 +3,7 @@
 const unsigned char MEM_SIZE = 100;
 unsigned char *memory;
 unsigned char checkSystem;
+const short int SC_REG_SIZE = 5;
 
 int
 sc_memoryInit ()

@@ -6,6 +6,7 @@
 enum colors
 {
   BLACK,
+  YELLOW,
   RED,
   GREEN,
   BROWN,

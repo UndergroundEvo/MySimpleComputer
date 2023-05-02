@@ -10,8 +10,10 @@
 #define INCORRECT_COMMAND 4
 #define REG_SIZE 5
 
+extern const unsigned char MEM_SIZE;
 extern unsigned char *memory;
 extern unsigned char checkSystem;
+extern const short int SC_REG_SIZE;
 extern unsigned short ACCUM;
 extern unsigned char IP;
 
