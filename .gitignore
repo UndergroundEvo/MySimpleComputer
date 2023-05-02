@@ -46,6 +46,3 @@
 bin/
 obj/
 .vs/
-backup_ram.bin
-mysimplecomputer.sublime-*
-*.swp

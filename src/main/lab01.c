@@ -4,7 +4,6 @@ int
 main ()
 {
   int value = 0;
-
   sc_memoryInit ();
   sc_memorySet (1, 5);
   sc_memorySet (2, 4);
@@ -76,6 +75,4 @@ main ()
   printf ("Операнд: ");
   printf ("%d", f_o);
   printf ("\n");
-
-  return 0;
 }

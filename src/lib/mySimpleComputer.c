@@ -1,7 +1,6 @@
 ﻿#include <mySimpleComputer.h>
 
 const unsigned char MEM_SIZE = 100;
-
 unsigned char *memory;
 unsigned char checkSystem;
 
@@ -84,11 +83,15 @@ sc_regInit (void)
 int
 sc_regSet (int reg, int value)
 {
-  if (reg < 0 || reg >= REG_SIZE)
-    printf ("Указан неверный флаг! \n");
-  if (value != 0 && value != 1)
-    printf ("Только значения 1 и 0 \n");
-  value == 1 ? (checkSystem |= (1 << reg)) : (checkSystem &= ~(1 << reg));
+  if ((reg != OVERFLOW && reg != DIVISION_BY_ZERO && reg != OUT_OF_MEMORY
+       && reg != IGNORING_CLOCK_PULSES && reg != INCORRECT_COMMAND)
+      || value < 0 || value > 1)
+    return -1;
+
+  if (value == 1)
+    checkSystem |= reg;
+  else
+    checkSystem &= ~reg;
   return 0;
 }
 
