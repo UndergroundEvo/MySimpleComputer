@@ -1,6 +1,7 @@
 ﻿#include <mySimpleComputer.h>
 
 const unsigned char MEM_SIZE = 100;
+// unsigned short int ACCUM;
 unsigned char *memory;
 unsigned char checkSystem;
 const short int SC_REG_SIZE = 5;

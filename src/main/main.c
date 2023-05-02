@@ -1,6 +1,5 @@
 #include <include.h>
 /* волшебный пингвин 🐧 */
-// short currMemCell = 0;
 
 int
 main ()
@@ -37,6 +36,7 @@ main ()
           break;
 
         case KEY_R:
+          raise (SIGALRM);
           break;
         case KEY_T:
           break;
@@ -45,6 +45,7 @@ main ()
           break;
 
         case KEY_F5:
+          ui_setAccumulator ();
           break;
         case KEY_F6:
           ui_setICounter ();
@@ -52,6 +53,11 @@ main ()
 
         case KEY_ENTER:
           ui_setMCellValue ();
+          break;
+
+        case KEY_ESC:
+          break;
+        case KEY_OTHER:
           break;
         }
     }

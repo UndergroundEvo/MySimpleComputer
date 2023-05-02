@@ -1,7 +1,7 @@
-﻿#include "myBigChars.h"
+﻿#include <myBigChars.h>
 
 char buf[512];
-
+enum colors color;
 unsigned int bc[][2] = {
   { 0xE7E7FFFF, 0xFFFFE7E7 }, { 0x1CDC7C3C, 0xFFFF1C1C },
   { 0xFF07FFFF, 0xFFFFE0FF }, { 0xFF07FFFF, 0xFFFF07FF },
@@ -18,7 +18,7 @@ unsigned int bc[][2] = {
 int
 bc_printA (char ch)
 {
-  write (1, &ch, sizeof (ch));
+  WRITE_STR (ch);
   return 0;
 }
 int
@@ -30,27 +30,26 @@ bc_box (int x, int y, int width, int height)
       || (width <= 1) || (height <= 1))
     return -1;
   mt_gotoXY (x, y);
-  // bc_printA ((char)ACS_UL);
-  // printf("\033(0%c\033(B",(char*)ACS_UL);
+  WRITE_WCHAR (ACS_UL);
   mt_gotoXY (x + width - 1, y);
-  bc_printA ((char)ACS_UR);
+  WRITE_WCHAR (ACS_UR);
   mt_gotoXY (x + width - 1, y + height - 1);
-  bc_printA ((char)ACS_DR);
+  WRITE_WCHAR (ACS_DR);
   mt_gotoXY (x, y + height - 1);
-  bc_printA ((char)ACS_DL);
+  WRITE_WCHAR (ACS_DL);
   for (int i = 1; i < width - 1; ++i)
     {
       mt_gotoXY (x + i, y);
-      bc_printA ((char)ACS_H);
+      WRITE_WCHAR (ACS_H);
       mt_gotoXY (x + i, y + height - 1);
-      bc_printA ((char)ACS_H);
+      WRITE_WCHAR (ACS_H);
     }
   for (int i = 1; i < height - 1; ++i)
     {
       mt_gotoXY (x, y + i);
-      bc_printA ((char)ACS_V);
+      WRITE_WCHAR (ACS_V);
       mt_gotoXY (x + width - 1, y + i);
-      bc_printA ((char)ACS_V);
+      WRITE_WCHAR (ACS_V);
     }
   return 0;
 }
@@ -70,9 +69,9 @@ bc_printbigchar (unsigned int *big, int x, int y, enum colors colorFG,
         if (bc_getbigcharpos (big, i, j, &value))
           value = -1;
         if (value)
-          bc_printA (ACS_CKBOARD);
+          WRITE_WCHAR (ACS_CKBOARD);
         else
-          printf ("%c", ' ');
+          WRITE_STR (' ');
       }
   mt_setdefaultcolorsettings ();
   return 0;
@@ -98,19 +97,9 @@ bc_setbigcharpos (unsigned int *big, int x, int y, int value)
 int
 bc_getbigcharpos (unsigned int *big, int x, int y, int *value)
 {
-  int shift;
-  if (x < 1 || x > 8 || y < 1 || y > 8)
+  if ((x < 0) || (x > 7) || (y < 0) || (y > 7))
     return -1;
-  if (y <= 4)
-    {
-      shift = (y * 8) - (8 - x) - 1;
-      *value = ((big[0] & (1 << shift)) ? 1 : 0);
-    }
-  else
-    {
-      shift = ((y - 4) * 8) - (8 - x) - 1;
-      *value = ((big[1] & (1 << shift)) ? 1 : 0);
-    }
+  *value = (big[y / 4] & (1 << (8 * (y % 4) + (7 - x)))) != 0;
   return 0;
 }
 int

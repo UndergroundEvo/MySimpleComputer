@@ -1,6 +1,7 @@
 #ifndef INCLUDE_H
 #define INCLUDE_H
 
+#include <ctype.h>
 #include <fcntl.h>
 #include <locale.h>
 #include <signal.h>

@@ -63,7 +63,6 @@ menu ()
 int
 main ()
 {
-  enum keys key;
   int value;
   sc_memoryInit ();
   sc_memorySet (1, 0);

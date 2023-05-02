@@ -1,16 +1,59 @@
-#include <Render.h>
+ï»¿#include <Render.h>
 
 short currMemCell = 0;
+enum keys;
 
 int
 rk_pause (int time)
 {
-  fflush (stdout); // î÷èñòêà ïîòîêà âûâîäà
+  fflush (stdout); // Ð¾Ñ‡Ð¸ÑÑ‚ÐºÐ° Ð¿Ð¾Ñ‚Ð¾ÐºÐ° Ð²Ñ‹Ð²Ð¾Ð´Ð°
   char buffer[5] = "\0";
   rk_myTermRegime (0, time, 0, 0, 0);
   read (fileno (stdin), buffer, 5);
   rk_myTermRestore ();
   return 0;
+}
+void
+signalHandler (int signal)
+{
+  switch (signal)
+    {
+    case SIGALRM:
+      // currMemCell = checkSystem;
+      checkSystem++;
+      ui_update ();
+      alarm (1);
+      rk_myTermRegime (0, 0, 0, 0, 0);
+
+      break;
+    case SIGUSR1:
+      alarm (0);
+      ui_initial ();
+      break;
+    default:
+      break;
+    }
+}
+
+int
+check_HEX (const char *buffer)
+{
+  if ((strlen (buffer) == 0) || (strlen (buffer) > 4))
+    return 0;
+  for (int i = 0; i < strlen (buffer); ++i)
+    if (!(isxdigit (buffer[i])))
+      return 0;
+  return 1;
+}
+int
+check_DEC (const char *buffer)
+{
+  if ((strlen (buffer) == 0) || (strlen (buffer) > 5))
+    return 0;
+  for (int i = 0; i < strlen (buffer); ++i)
+    if (!(isdigit (buffer[i])))
+      return 0;
+  return 1;
 }
 int
 print_norm (char *str, enum colors color)
@@ -94,10 +137,9 @@ int
 ui_setMCellValue ()
 {
   char buffer[10];
-  printf (
-      "Set the value of the cell under the number \033[38;5;%dm%d\033[0m\n",
-      LIGHT_MAGENT, currMemCell);
-  printf ("Enter value in \033[38;5;%dmHEX\033[0m format > ", MAGENT);
+  printf ("Set value of the memory cell \033[38;5;%dm%d\033[0m\n",
+          LIGHT_MAGENT, currMemCell);
+  printf ("Enter value \033[38;5;%dmHEX\033[0m format: ", MAGENT);
   fgets (buffer, 10, stdin);
   if (buffer[strlen (buffer) - 1] != '\n')
     clearBuffIn ();
@@ -175,7 +217,7 @@ ui_loadMemory ()
       ui_messageOutput ((char *)"The name of the file to open is too long (up "
                                 "to 100 characters are allowed)",
                         SUN);
-      clearBuffIn (); // î÷èñòêà ïîòîêà ââîäà
+      clearBuffIn (); // Ð¾Ñ‡Ð¸ÑÑ‚ÐºÐ° Ð¿Ð¾Ñ‚Ð¾ÐºÐ° Ð²Ð²Ð¾Ð´Ð°
       return -1;
     }
   filename[strlen (filename) - 1] = '\0';
@@ -198,7 +240,7 @@ ui_setICounter ()
   printf ("Enter value in \033[38;5;%dmHEX\033[0m format > ", MAGENT);
   fgets (buffer, 10, stdin);
   if (buffer[strlen (buffer) - 1] != '\n')
-    clearBuffIn (); // î÷èñòêà ïîòîêà ââîäà
+    clearBuffIn (); // Ð¾Ñ‡Ð¸ÑÑ‚ÐºÐ° Ð¿Ð¾Ñ‚Ð¾ÐºÐ° Ð²Ð²Ð¾Ð´Ð°
   if (!checkCorrectInput (buffer))
     {
       ui_messageOutput ((char *)"Invalid input", LIME);
@@ -219,21 +261,116 @@ ui_setICounter ()
   return 0;
 }
 int
+ui_setAccumulator ()
+{
+
+  char buffer[10];
+  printf ("Set a value \033[38;5;%dm\"Accumulator\"\033[0m", GREEN);
+  printf ("\nEnter value in \033[38;5;%dmHEX\033[0m format > ", BROWN);
+  fgets (buffer, 10, stdin);
+  if (buffer[strlen (buffer) - 1] != '\n')
+    clearBuffIn ();
+  else
+    buffer[strlen (buffer) - 1] = '\0';
+  unsigned short int res = 0;
+  int i;
+  if (buffer[0] == '+')
+    {
+      ui_messageOutput ((char *)"Invalid input", RED);
+      return -1;
+    }
+  else
+    {
+      res |= (1 << 14);
+      if (buffer[0] == '-')
+        {
+          i = 1;
+          res |= (1 << 13);
+        }
+      else
+        i = 0;
+    }
+  if (!check_HEX (&buffer[i]))
+    {
+      ui_messageOutput ((char *)"Invalid input", RED);
+      return -1;
+    }
+  long int number;
+  char *tmp;
+  number = strtol (&buffer[i], &tmp, 16);
+  if (buffer[0] == '+')
+    {
+      if (number > 0x3FFF)
+        {
+          ui_messageOutput (
+              (char *)"The command value must not exceed 14 bits (0x3FFF)",
+              RED);
+          return -1;
+        }
+      else
+        {
+          number &= 0x3FFF;
+          if ((number >> 8) > 0x7F)
+            {
+              ui_messageOutput (
+                  (char *)"The command cannot be more than 7 bits (0x7F)",
+                  RED);
+              return -1;
+            }
+          if ((number & 0xFF) > 0x7F)
+            {
+              ui_messageOutput (
+                  (char *)"The operand cannot be more than 7 bits (0x7F)",
+                  RED);
+              return -1;
+            }
+          else
+            {
+              int value = 0;
+              if (sc_commandEncode ((int)((number >> 8)), (int)(number & 0xFF),
+                                    &value))
+                return -1;
+              res |= value;
+            }
+        }
+    }
+  else
+    {
+      if ((number > 0x2000) || ((number > 0x1FFF) && (buffer[0] != '-')))
+        {
+          ui_messageOutput ((char *)"The valid range for the value of the "
+                                    "number from -0x2000 to 0x1FFF inclusive",
+                            RED);
+          return -1;
+        }
+      if (buffer[0] == '-')
+        {
+          number = ~number + 1;
+          if (!((number >> 13) & 1))
+            res &= ~(1 << 13);
+        }
+      number &= 0x1FFF;
+      res |= number;
+    }
+  ACCUM = res;
+  return 0;
+}
+int
 drawingBoxes ()
 {
-  if (bc_box (1, 1, 61, 12)) // Îêíî Memory
+  if (bc_box (1, 1, 61, 12)) // ÐžÐºÐ½Ð¾ Memory
     return -1;
-  if (bc_box (62, 1, 22, 3)) // Îêíî accumulator
+  if (bc_box (62, 1, 22, 3)) // ÐžÐºÐ½Ð¾ accumulator
     return -1;
-  if (bc_box (62, 4, 22, 3)) // Îêíî instructionCounter
+  if (bc_box (62, 4, 22, 3)) // ÐžÐºÐ½Ð¾ instructionCounter
     return -1;
-  if (bc_box (62, 7, 22, 3)) // Îêíî Operation
+  if (bc_box (62, 7, 22, 3)) // ÐžÐºÐ½Ð¾ Operation
     return -1;
-  if (bc_box (62, 10, 22, 3)) // Îêíî Flags
+  if (bc_box (62, 10, 22, 3)) // ÐžÐºÐ½Ð¾ Flags
     return -1;
-  if (bc_box (1, 13, 52, 10)) // Îêíî BigChars
+  if (bc_box (1, 13, 52, 10)) // ÐžÐºÐ½Ð¾ BigChars
     return -1;
-  if (bc_box (53, 13, 31, 10)) // Îêíî Keys
+  if (bc_box (53, 13, 31, 10)) // ÐžÐºÐ½Ð¾ Keys
     return -1;
 
   return 0;
@@ -241,13 +378,13 @@ drawingBoxes ()
 int
 drawingTexts ()
 {
-  /* Çàãîëîâêè */
+  /* Ð—Ð°Ð³Ð¾Ð»Ð¾Ð²ÐºÐ¸ */
   mt_gotoXY (30, 1);
   printf (" Memory ");
   mt_gotoXY (66, 1);
-  printf (" accumulator ");
+  printf (" Accumulator ");
   mt_gotoXY (63, 4);
-  printf (" instructionCounter ");
+  printf (" InstructionCounter ");
   mt_gotoXY (67, 7);
   printf (" Operation ");
   mt_gotoXY (69, 10);
@@ -256,13 +393,11 @@ drawingTexts ()
   printf (" Keys: ");
 
   /* HotKeys */
-  char *hotK[] = { (char *)"l  - load",
-                   (char *)"s  - save",
-                   (char *)"r  - run",
-                   (char *)"t  - step",
-                   (char *)"i  - reset",
-                   (char *)"F5 - accumulator",
-                   (char *)"F6 - instructionCounter" };
+  char *hotK[]
+      = { (char *)"CAPS REQUIRED!",   (char *)"L  - Load",
+          (char *)"S  - Save",        (char *)"R  - Run (SIGALRM)",
+          (char *)"T  - Step",        (char *)"I  - Reset (SIGUSR1)",
+          (char *)"F5 - Accumulator", (char *)"F6 - Instruction Counter" };
 
   for (int i = 0; i < sizeof (hotK) / sizeof (*hotK); ++i)
     {
@@ -281,6 +416,8 @@ drawingMemory ()
         int tmp = memory[i * 10 + j];
         if ((i * 10 + j) == currMemCell)
           mt_setbgcolor (GREEN);
+        else
+          mt_setbgcolor (WHITE);
         if ((tmp >> 14) & 1)
           printf (" %04X", tmp & (~(1 << 14)));
         else
@@ -299,7 +436,6 @@ int
 drawingOperation ()
 {
   mt_gotoXY (71, 7);
-  // TODO : òóò ÷òî-òî äîëæíî áûòü
   return 0;
 }
 int
@@ -312,7 +448,10 @@ drawingInstructionCounter ()
 int
 drawingFlags ()
 {
-  char tmp[] = { 'O', 'Z', 'M', 'I', 'C' };
+  // char tmp[] = { 'O', 'Z', 'M', 'I', 'C' };
+  // char tmp[] = { "âš°", "ðŸ§¨", "ðŸ—¿", "â›”", "ðŸ›‘" };
+  char *tmp[] = { (char *)"\u26B0", (char *)"\U0001F9E8", (char *)"\U0001F5FF",
+                  (char *)"\U0001F6AB", (char *)"\U0001F6D1" };
   for (int i = 0; i < SC_REG_SIZE; ++i)
     {
       int value;
@@ -322,12 +461,12 @@ drawingFlags ()
       if (value)
         {
           mt_setfgcolor (MAGENT);
-          printf ("%c", tmp[i]);
+          printf ("%s", tmp[i]);
         }
       else
         {
           mt_setfgcolor (SUN);
-          printf ("%c", tmp[i]);
+          printf ("%s", tmp[i]);
         }
       mt_setdefaultcolorsettings ();
     }
@@ -336,7 +475,7 @@ drawingFlags ()
 int
 drawingBigChar ()
 {
-  short int tmp;
+  int tmp;
   sc_memoryGet (currMemCell, &tmp);
   if (!((tmp >> 14) & 1))
     bc_printbigchar (bc[16], 2, 14, GREEN, BLACK); // +
@@ -371,21 +510,4 @@ clearBuffIn ()
     }
   while (c != '\n' && c != '\0');
   return 0;
-}
-void
-signalHandler (int signal)
-{
-  switch (signal)
-    {
-    case SIGALRM:
-      break;
-    case SIGUSR1:
-      alarm (0);
-      sc_regInit ();
-      sc_regSet (IGNORING_CLOCK_PULSES, 1);
-      checkSystem = 0;
-      break;
-    default:
-      break;
-    }
 }
