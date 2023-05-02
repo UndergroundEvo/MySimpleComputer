@@ -1,20 +1,4 @@
 # Простейшая вычислительная машина Simple Computer
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-- все лабораторные находяться в ветках
-=======
-- [ ] **Практическое задание №2:**
-    - **Тема:** Консоль управления моделью Simple Computer. Текстовая часть
-    - **Ссылка для просмотра:** [lab02.pdf](https://eios.sibsutis.ru/pluginfile.php/247897/mod_assign/introattachment/0/lab02.pdf)
->>>>>>> lab02
-=======
-- [ ] **Практическое задание №3:**
-    - **Тема:** Практическое задание № 3. Консоль управления моделью Simple Computer. Псевдографика. «Большие символы».
-    - **Ссылка для просмотра:** [lab03.pdf](https://eios.sibsutis.ru/pluginfile.php/247897/mod_assign/introattachment/0/lab03.pdf)
->>>>>>> origin/lab03
-=======
 
 В рамках выполнения практических заданий и курсового проектирования необходимо разработать программную модель простейшей вычислительной машины **Simple Computer**.
 
@@ -75,7 +59,7 @@
   - **Тема:** Консоль управления моделью Simple Computer. Клавиатура. Обработка нажатия клавиш. Неканонический режим работы терминала.
   - **Ссылка для просмотра:** [lab04.pdf](https://eios.sibsutis.ru/pluginfile.php/247900/mod_assign/introattachment/0/lab04.pdf)
 
-- [] **Практическое задание №5:**
+- [x] **Практическое задание №5:**
   - **Тема:** Подсистема прерываний ЭВМ. Сигналы и их обработка.
   - **Ссылка для просмотра:** [lab05.pdf](https://eios.sibsutis.ru/pluginfile.php/247901/mod_assign/introattachment/0/lab05.pdf)
 
@@ -85,9 +69,3 @@
 
 - [ ] **Курсовой проект:**
   - **Ссылка для просмотра:** [course-project.pdf](https://eios.sibsutis.ru/pluginfile.php/247903/mod_assign/introattachment/0/course-project.pdf)
->>>>>>> lab04
-=======
-- [ ] **Практическое задание №5:**
-    - **Тема:** Практическое задание № 5. Подсистема прерываний ЭВМ. Сигналы и их обработка.
-    - **Ссылка для просмотра:** [lab05.pdf](https://eios.sibsutis.ru/pluginfile.php/247897/mod_assign/introattachment/0/lab05.pdf)
->>>>>>> lab05

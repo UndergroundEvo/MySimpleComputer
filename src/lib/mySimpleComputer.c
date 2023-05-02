@@ -121,10 +121,7 @@ int
 sc_commandDecode (int value, int *command, int *operand)
 {
   if ((value >> 14) != 0)
-    {
-      sc_regSet (INCORRECT_COMMAND, 4);
-      return (-1);
-    }
+    sc_regSet (INCORRECT_COMMAND, 4);
   *operand = (value & 127);
   *command = ((value >> 7) & 127);
   return 0;
