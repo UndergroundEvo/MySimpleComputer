@@ -5,14 +5,23 @@
 
 enum colors
 {
+  BLACK,
   RED,
   GREEN,
+  BROWN,
   BLUE,
-  YELLOW,
-  MANGETA,
+  MAGENT,
   CYAN,
+  DARK_GRAY,
+  LIGHT_GRAY,
+  PINK,
+  LIME,
+  SUN,
+  AQUA,
+  LIGHT_MAGENT,
+  LIGHT_CYAN,
   WHITE,
-  BLACK
+  DEFAULT
 };
 
 int mt_clrscreen ();
@@ -20,4 +29,5 @@ int mt_getscreensize (int *rows, int *cols);
 int mt_gotoXY (int numRow, int numCol);
 int mt_setfgcolor (enum colors);
 int mt_setbgcolor (enum colors);
+int mt_setdefaultcolorsettings ();
 #endif
