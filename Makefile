@@ -58,5 +58,5 @@ clean:
 	rm -f create_dirs
 	rm -rf obj
 	rm -rf bin
-	rm basic
-	rm assembler
+	rm -f basic
+	rm -f assembler
