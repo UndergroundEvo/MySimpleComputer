@@ -3,6 +3,46 @@
 short currMemCell = 0;
 enum keys;
 
+void
+signalHandler(int signal) {
+    switch (signal) {
+    case SIGALRM:
+        setCurrMemPointer_to_ICounter();
+        ui_update();
+        if (CU()) {
+            sc_regSet(IGNORING_CLOCK_PULSES, 1);
+            ui_update();
+            alarm(0);
+        }
+        else alarm(1);
+        rk_myTermRegime(0, 0, 0, 0, 0);
+        break;
+
+    case SIGUSR1:
+        alarm(0);
+        ui_initial();
+        break;
+    default:
+        break;
+    }
+    //switch (signal)
+    //  {
+    //  case SIGALRM:
+    //    // currMemCell = checkSystem;
+    //    checkSystem++;
+    //    ui_update ();
+    //    alarm (1);
+    //    rk_myTermRegime (0, 0, 0, 0, 0);
+    //    break;
+    //  case SIGUSR1:
+    //    alarm (0);
+    //    ui_initial ();
+    //    break;
+    //  default:
+    //    break;
+    //  }
+}
+
 int
 rk_pause (int time)
 {
@@ -13,28 +53,11 @@ rk_pause (int time)
   rk_myTermRestore ();
   return 0;
 }
-void
-signalHandler (int signal)
-{
-  switch (signal)
-    {
-    case SIGALRM:
-      // currMemCell = checkSystem;
-      checkSystem++;
-      ui_update ();
-      alarm (1);
-      rk_myTermRegime (0, 0, 0, 0, 0);
-
-      break;
-    case SIGUSR1:
-      alarm (0);
-      ui_initial ();
-      break;
-    default:
-      break;
-    }
+int 
+setCurrMemPointer_to_ICounter() {
+    currMemCell = checkSystem;
+    return 0;
 }
-
 int
 check_HEX (const char *buffer)
 {

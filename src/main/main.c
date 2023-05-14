@@ -11,6 +11,7 @@ main ()
   enum keys key;
   do
     {
+      key = KEY_OTHER;
       ui_update ();
       rk_readKey (&key);
       switch (key)

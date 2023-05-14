@@ -10,6 +10,7 @@
 extern short currMemCell;
 extern enum keys key;
 
+int setCurrMemPointer_to_ICounter();
 int rk_pause (int time);
 int print_norm (char *str, enum colors color);
 int ui_initial ();

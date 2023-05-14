@@ -22,5 +22,7 @@
 #include "myReadkey.h"
 #include "mySimpleComputer.h"
 #include "myTerm.h"
+#include "ALU.h"
+#include "CU.h"
 
 #endif
