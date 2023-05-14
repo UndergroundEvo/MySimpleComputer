@@ -4,43 +4,47 @@ short currMemCell = 0;
 enum keys;
 
 void
-signalHandler(int signal) {
-    switch (signal) {
+signalHandler (int signal)
+{
+  switch (signal)
+    {
     case SIGALRM:
-        setCurrMemPointer_to_ICounter();
-        ui_update();
-        if (CU()) {
-            sc_regSet(IGNORING_CLOCK_PULSES, 1);
-            ui_update();
-            alarm(0);
+      setCurrMemPointer_to_ICounter ();
+      ui_update ();
+      if (CU ())
+        {
+          sc_regSet (IGNORING_CLOCK_PULSES, 1);
+          ui_update ();
+          alarm (0);
         }
-        else alarm(1);
-        rk_myTermRegime(0, 0, 0, 0, 0);
-        break;
+      else
+        alarm (1);
+      rk_myTermRegime (0, 0, 0, 0, 0);
+      break;
 
     case SIGUSR1:
-        alarm(0);
-        ui_initial();
-        break;
+      alarm (0);
+      ui_initial ();
+      break;
     default:
-        break;
+      break;
     }
-    //switch (signal)
-    //  {
-    //  case SIGALRM:
-    //    // currMemCell = checkSystem;
-    //    checkSystem++;
-    //    ui_update ();
-    //    alarm (1);
-    //    rk_myTermRegime (0, 0, 0, 0, 0);
-    //    break;
-    //  case SIGUSR1:
-    //    alarm (0);
-    //    ui_initial ();
-    //    break;
-    //  default:
-    //    break;
-    //  }
+  // switch (signal)
+  //   {
+  //   case SIGALRM:
+  //     // currMemCell = checkSystem;
+  //     checkSystem++;
+  //     ui_update ();
+  //     alarm (1);
+  //     rk_myTermRegime (0, 0, 0, 0, 0);
+  //     break;
+  //   case SIGUSR1:
+  //     alarm (0);
+  //     ui_initial ();
+  //     break;
+  //   default:
+  //     break;
+  //   }
 }
 
 int
@@ -53,10 +57,11 @@ rk_pause (int time)
   rk_myTermRestore ();
   return 0;
 }
-int 
-setCurrMemPointer_to_ICounter() {
-    currMemCell = checkSystem;
-    return 0;
+int
+setCurrMemPointer_to_ICounter ()
+{
+  currMemCell = checkSystem;
+  return 0;
 }
 int
 check_HEX (const char *buffer)
@@ -419,7 +424,7 @@ drawingTexts ()
   char *hotK[]
       = { (char *)"CAPS REQUIRED!",   (char *)"L  - Load",
           (char *)"S  - Save",        (char *)"R  - Run (SIGALRM)",
-          (char *)"T  - Step",        (char *)"I  - Reset (SIGUSR1)",
+          (char *)"T  - Step CU()",   (char *)"I  - Reset (SIGUSR1)",
           (char *)"F5 - Accumulator", (char *)"F6 - Instruction Counter" };
 
   for (int i = 0; i < sizeof (hotK) / sizeof (*hotK); ++i)

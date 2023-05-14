@@ -3,11 +3,11 @@
 
 #include "include.h"
 
-int ALU(int, int);
-int addALU(int);
-int subALU(int);
-int mulALU(int);
-int divALU(int);
-int orALU(int);
+int ALU (int, int);
+int addALU (int);
+int subALU (int);
+int mulALU (int);
+int divALU (int);
+int orALU (int);
 
 #endif

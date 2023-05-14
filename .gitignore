@@ -48,3 +48,5 @@ obj/
 .vs/
 dirs_created
 /save
+/basic
+/assembler

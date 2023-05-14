@@ -21,10 +21,10 @@ all: create_dirs bin/basic bin/assembler $(objects) $(libs) bin/main bin/lab01 b
 -include obj/src/main/*.d
 
 bin/basic: src/main/basic.cpp
-	g++ src/main/basic.cpp -o bin/basic
+	g++ src/main/basic.cpp -o basic
 
 bin/assembler: src/main/assembler.cpp
-	g++ src/main/assembler.cpp -o bin/assembler
+	g++ src/main/assembler.cpp -o assembler
 
 obj/src/lib/lib%.a: obj/src/lib/%.o
 	ar rcs $@ $^
@@ -58,3 +58,5 @@ clean:
 	rm -f create_dirs
 	rm -rf obj
 	rm -rf bin
+	rm basic
+	rm assembler
