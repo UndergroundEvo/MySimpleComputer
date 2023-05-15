@@ -3,6 +3,34 @@
 short currMemCell = 0;
 enum keys;
 
+void
+signalHandler (int signal)
+{
+  switch (signal)
+    {
+    case SIGALRM:
+      setCurrMemPointer_to_ICounter ();
+      ui_update ();
+      if (CU ())
+        {
+          sc_regSet (IGNORING_CLOCK_PULSES, 1);
+          ui_update ();
+          alarm (0);
+        }
+      else
+        alarm (1);
+      rk_myTermRegime (0, 0, 0, 0, 0);
+      break;
+
+    case SIGUSR1:
+      alarm (0);
+      ui_initial ();
+      break;
+    default:
+      break;
+    }
+}
+
 int
 rk_pause (int time)
 {
@@ -13,28 +41,12 @@ rk_pause (int time)
   rk_myTermRestore ();
   return 0;
 }
-void
-signalHandler (int signal)
+int
+setCurrMemPointer_to_ICounter ()
 {
-  switch (signal)
-    {
-    case SIGALRM:
-      // currMemCell = checkSystem;
-      checkSystem++;
-      ui_update ();
-      alarm (1);
-      rk_myTermRegime (0, 0, 0, 0, 0);
-
-      break;
-    case SIGUSR1:
-      alarm (0);
-      ui_initial ();
-      break;
-    default:
-      break;
-    }
+  currMemCell = checkSystem;
+  return 0;
 }
-
 int
 check_HEX (const char *buffer)
 {
@@ -396,7 +408,7 @@ drawingTexts ()
   char *hotK[]
       = { (char *)"CAPS REQUIRED!",   (char *)"L  - Load",
           (char *)"S  - Save",        (char *)"R  - Run (SIGALRM)",
-          (char *)"T  - Step",        (char *)"I  - Reset (SIGUSR1)",
+          (char *)"T  - Step CU()",   (char *)"I  - Reset (SIGUSR1)",
           (char *)"F5 - Accumulator", (char *)"F6 - Instruction Counter" };
 
   for (int i = 0; i < sizeof (hotK) / sizeof (*hotK); ++i)
@@ -435,9 +447,32 @@ drawingAccumulator ()
 int
 drawingOperation ()
 {
-  mt_gotoXY (71, 7);
+  // mt_gotoXY (71, 7);
+  mt_gotoXY (69, 8);
+  int tmp;
+  sc_memoryGet (currMemCell, &tmp);
+  if (!((tmp >> 14) & 1))
+    {
+      int operand, command;
+      sc_commandDecode (tmp, &command, &operand);
+      printf ("+%02X:%02X", command, operand);
+    }
+  else
+    {
+      int left, right;
+      int negative = (tmp >> 13) & 1;
+      if (negative)
+        tmp = (~(tmp - 1)) & 0x3FFF;
+      else
+        tmp &= 0x1FFF;
+      left = tmp >> 8;
+      right = tmp & 0xFF;
+      negative ? printf ("-%02X:%02X", left, right)
+               : printf (" %02X:%02X", left, right);
+    }
   return 0;
 }
+
 int
 drawingInstructionCounter ()
 {

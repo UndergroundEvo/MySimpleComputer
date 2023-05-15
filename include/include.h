@@ -17,6 +17,8 @@
 #include <unistd.h>
 #include <wchar.h>
 
+#include "ALU.h"
+#include "CU.h"
 #include "Render.h"
 #include "myBigChars.h"
 #include "myReadkey.h"

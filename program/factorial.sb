@@ -1,0 +1,8 @@
+10 INPUT A
+11 LET B = 1
+19 LET C = 1
+20 LET B = B + 1
+21 LET C = C * B
+30 IF B < A - 1 GOTO 20
+40 PRINT C
+50 END

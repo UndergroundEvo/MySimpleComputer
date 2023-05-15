@@ -2,15 +2,24 @@
 /* волшебный пингвин 🐧 */
 
 int
-main ()
+main (int argc, char const *argv[])
 {
   ui_initial ();
   signal (SIGALRM, signalHandler);
   signal (SIGUSR1, signalHandler);
-
   enum keys key;
+  if (argc == 2)
+    {
+      sc_memoryLoad ((char *)argv[1]);
+    }
+  else if (argc > 2)
+    {
+      ui_messageOutput ((char *)"Exceeded the number of arguments", RED);
+      return -1;
+    }
   do
     {
+      key = KEY_OTHER;
       ui_update ();
       rk_readKey (&key);
       switch (key)
@@ -39,6 +48,9 @@ main ()
           raise (SIGALRM);
           break;
         case KEY_T:
+          setCurrMemPointer_to_ICounter ();
+          ui_update ();
+          CU ();
           break;
         case KEY_I:
           raise (SIGUSR1);
