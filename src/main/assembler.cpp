@@ -95,7 +95,7 @@ decodeLine (string line)
 int
 main (int argc, char *argv[])
 {
-  cout << "Start translator" << endl;
+  cout << "Start!" << endl;
 
   if (argc < 2)
     {
@@ -156,7 +156,7 @@ main (int argc, char *argv[])
 
   in.close (); // закрываем файл
 
-  cout << "End Translator" << endl;
+  cout << "Successfully" << endl;
 
   return 0;
 }

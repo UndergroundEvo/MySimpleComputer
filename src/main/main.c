@@ -7,7 +7,6 @@ main (int argc, char const *argv[])
   ui_initial ();
   signal (SIGALRM, signalHandler);
   signal (SIGUSR1, signalHandler);
-  short zero, out, ignor, comm;
   enum keys key;
   if (argc == 2)
     {

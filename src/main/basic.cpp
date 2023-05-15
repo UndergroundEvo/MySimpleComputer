@@ -521,7 +521,7 @@ cacheRow (string a, int b)
 int
 main (int argc, char *argv[])
 {
-  cout << "Start translator" << endl;
+  cout << "Start" << endl;
 
   if (argc < 2)
     {
@@ -642,7 +642,7 @@ main (int argc, char *argv[])
   in.close (); // закрываем файл
   out.close ();
 
-  cout << "End Translator" << endl;
+  cout << "Successfully" << endl;
 
   return 0;
 }

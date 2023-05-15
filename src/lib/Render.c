@@ -29,22 +29,6 @@ signalHandler (int signal)
     default:
       break;
     }
-  // switch (signal)
-  //   {
-  //   case SIGALRM:
-  //     // currMemCell = checkSystem;
-  //     checkSystem++;
-  //     ui_update ();
-  //     alarm (1);
-  //     rk_myTermRegime (0, 0, 0, 0, 0);
-  //     break;
-  //   case SIGUSR1:
-  //     alarm (0);
-  //     ui_initial ();
-  //     break;
-  //   default:
-  //     break;
-  //   }
 }
 
 int
@@ -463,9 +447,32 @@ drawingAccumulator ()
 int
 drawingOperation ()
 {
-  mt_gotoXY (71, 7);
+  // mt_gotoXY (71, 7);
+  mt_gotoXY (69, 8);
+  int tmp;
+  sc_memoryGet (currMemCell, &tmp);
+  if (!((tmp >> 14) & 1))
+    {
+      int operand, command;
+      sc_commandDecode (tmp, &command, &operand);
+      printf ("+%02X:%02X", command, operand);
+    }
+  else
+    {
+      int left, right;
+      int negative = (tmp >> 13) & 1;
+      if (negative)
+        tmp = (~(tmp - 1)) & 0x3FFF;
+      else
+        tmp &= 0x1FFF;
+      left = tmp >> 8;
+      right = tmp & 0xFF;
+      negative ? printf ("-%02X:%02X", left, right)
+               : printf (" %02X:%02X", left, right);
+    }
   return 0;
 }
+
 int
 drawingInstructionCounter ()
 {
